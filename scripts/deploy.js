@@ -7,6 +7,9 @@ async function main(){
 
   console.log("Contract deployed at : ",contract.target);
 
+  console.log("Waiting 30 seconds before verification...")
+  await new Promise(resolve => setTimeout(resolve, 30000));
+  
   await hre.run("verify:verify",{
     address : contract.target,
     constructorArguments : [1000]

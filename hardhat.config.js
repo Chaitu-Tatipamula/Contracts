@@ -11,12 +11,27 @@ module.exports = {
     "op-sepolia": {
       url: process.env.RPC_URL,
       accounts: [process.env.PRIVATE_KEY]
+    },
+    "optimism": {
+      url: process.env.RPC_URL,
+      accounts: [process.env.PRIVATE_KEY]
+    },
+    "arbitrumSepolia": {
+      url: process.env.RPC_URL,
+      accounts: [process.env.PRIVATE_KEY]
+    },
+    "celo-alfajores": {
+      url: process.env.RPC_URL,
+      accounts: [process.env.PRIVATE_KEY]
     }
   },
   etherscan: {
     apiKey: {
       "calibnet": process.env.VERIFY_KEY,
-      "op-sepolia": process.env.VERIFY_KEY
+      "op-sepolia": process.env.VERIFY_KEY,
+      "optimism": process.env.VERIFY_KEY,
+      "arbitrumSepolia": process.env.VERIFY_KEY,
+      "celo-alfajores": process.env.VERIFY_KEY
     },
     customChains: [
       {
@@ -24,7 +39,7 @@ module.exports = {
         chainId: 314159,
         urls: {
           apiURL: "https://api.calibration.node.glif.io/rpc/v1",
-          browserURL: "https://calibration.filfox.info/en"
+          browserURL: "https://calibration.filscan.io"
         }
       },
       {
@@ -34,6 +49,30 @@ module.exports = {
           apiURL: "https://api-sepolia-optimistic.etherscan.io/api",
           browserURL: "https://sepolia-optimism.etherscan.io"
         }
+      },
+      {
+        network: "optimism",
+        chainId: 10,
+        urls: {
+          apiURL: "https://api-optimistic.etherscan.io/api",
+          browserURL: "https://optimistic.etherscan.io"
+        }
+      },
+      {
+        network: "arbitrumSepolia",
+        chainId: 421614,
+        urls: {
+          apiURL: "https://api-sepolia.arbiscan.io/api",
+          browserURL: "https://sepolia.arbiscan.io/"
+        }
+      },
+      {
+        network: "celo-alfajores",
+        chainId: 44787,
+        urls: {
+            apiURL: "https://api-alfajores.celoscan.io/api",
+            browserURL: "https://alfajores.celoscan.io",
+        },
       }
     ]
   }
