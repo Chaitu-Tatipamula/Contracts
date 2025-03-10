@@ -2,14 +2,14 @@ const hre = require('hardhat')
 
 async function main(){
 
-  const contract = await hre.ethers.deployContract("WhiteList",[10])
+  const contract = await hre.ethers.deployContract("PPTToken",[1000])
   await contract.waitForDeployment();
 
   console.log("Contract deployed at : ",contract.target);
 
   await hre.run("verify:verify",{
     address : contract.target,
-    constructorArguments : [10]
+    constructorArguments : [1000]
   })
 
 }

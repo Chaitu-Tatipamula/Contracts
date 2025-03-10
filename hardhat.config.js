@@ -3,24 +3,36 @@ require('dotenv').config()
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
   solidity: "0.8.20",
-  networks : {
-    "base-sepolia" : {
-      url : process.env.RPC_URL,
-      accounts : [process.env.PRIVATE_KEY]
+  networks: {
+    "calibnet": {
+      url: process.env.RPC_URL,
+      accounts: [process.env.PRIVATE_KEY]
+    },
+    "op-sepolia": {
+      url: process.env.RPC_URL,
+      accounts: [process.env.PRIVATE_KEY]
     }
   },
-
-  etherscan : {
-    apiKey : {
-      "base-sepolia" : process.env.ETHERSCAN_API
+  etherscan: {
+    apiKey: {
+      "calibnet": process.env.VERIFY_KEY,
+      "op-sepolia": process.env.VERIFY_KEY
     },
     customChains: [
       {
-        network: "base-sepolia",
-        chainId: 84532,
+        network: "calibnet",
+        chainId: 314159,
         urls: {
-         apiURL: "https://api-sepolia.basescan.org/api",
-         browserURL: "https://sepolia.basescan.org"
+          apiURL: "https://api.calibration.node.glif.io/rpc/v1",
+          browserURL: "https://calibration.filfox.info/en"
+        }
+      },
+      {
+        network: "op-sepolia",
+        chainId: 11155420,
+        urls: {
+          apiURL: "https://api-sepolia-optimistic.etherscan.io/api",
+          browserURL: "https://sepolia-optimism.etherscan.io"
         }
       }
     ]
