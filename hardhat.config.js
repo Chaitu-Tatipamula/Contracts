@@ -23,12 +23,17 @@ module.exports = {
     "celo-alfajores": {
       url: process.env.RPC_URL,
       accounts: [process.env.PRIVATE_KEY]
+    },
+    "op-mainnet": {
+      url: process.env.RPC_URL_MAINNET,
+      accounts: [process.env.PRIVATE_KEY]
     }
   },
   etherscan: {
     apiKey: {
       "calibnet": process.env.VERIFY_KEY,
       "op-sepolia": process.env.VERIFY_KEY,
+      "op-mainnet": process.env.VERIFY_KEY,
       "optimism": process.env.VERIFY_KEY,
       "arbitrumSepolia": process.env.VERIFY_KEY,
       "celo-alfajores": process.env.VERIFY_KEY
@@ -73,6 +78,14 @@ module.exports = {
             apiURL: "https://api-alfajores.celoscan.io/api",
             browserURL: "https://alfajores.celoscan.io",
         },
+      },
+      {
+        network: "op-mainnet",
+        chainId: 10,
+        urls: {
+          apiURL: "https://api-optimistic.etherscan.io/api",
+          browserURL: "https://optimistic.etherscan.io"
+        }
       }
     ]
   }
