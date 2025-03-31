@@ -3,30 +3,60 @@ pragma solidity ^0.8.20;
 
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
+import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
-contract MedInvoiceContract is Ownable {
+contract MedInvoiceContract is Ownable, ReentrancyGuard {
     mapping(address => string[]) private fileList;
-    IERC20 public immutable i_mediToken;
+    IERC20 public immutable pptToken;
+    uint256 public constant SUBSCRIPTION_AMOUNT = 10 * 10**18;
+    uint256 public constant SUBSCRIPTION_PERIOD = 365 days;
+    mapping(address => uint256) public subscriptionEndTimes;
 
     event FileSaved(address indexed user, string file, uint256 timestamp);
+    event NewSubscription(address indexed subscriber, uint256 endTime);
 
-    constructor(address _mediToken) Ownable(msg.sender) {
-        i_mediToken = IERC20(_mediToken);
+    constructor(address _pptToken) Ownable(msg.sender) {
+        pptToken = IERC20(_pptToken);
     }
 
-    function saveFile(string memory _file) public {
-        require(bytes(_file).length > 0, "File content cannot be empty");
-        require(i_mediToken.balanceOf(msg.sender) >= 1, "You need to hold a MediToken to save.");
-        fileList[msg.sender].push(_file);
-        emit FileSaved(msg.sender, _file, block.timestamp);
+    function saveFile(string memory file) public {
+        require(bytes(file).length > 0, "File content cannot be empty");
+        require(pptToken.balanceOf(msg.sender) >= 1, "You need to hold a MediToken to save.");
+        fileList[msg.sender].push(file);
+        emit FileSaved(msg.sender, file, block.timestamp);
     }
 
     function getFiles() public view returns (string[] memory) {
-        require(i_mediToken.balanceOf(msg.sender) >= 1, "You need to hold a MediToken to view saved files.");
+        require(pptToken.balanceOf(msg.sender) >= 1, "You need to hold a MediToken to view saved files.");
         return fileList[msg.sender];
     }
     
     function getUserTokens() public view returns (uint256) {
-        return i_mediToken.balanceOf(msg.sender);
+        return pptToken.balanceOf(msg.sender);
+    }
+
+    function isSubscribed(address user) public view returns (bool) {
+        return subscriptionEndTimes[user] > block.timestamp;
+    }
+
+    function getSubscriptionEndDate(address user) public view returns (uint256) {
+        return subscriptionEndTimes[user];
+    }
+    
+    function subscribe() external nonReentrant {
+        require(!isSubscribed(msg.sender), "Already subscribed");
+        
+        // First update the state
+        uint256 endTime = block.timestamp + SUBSCRIPTION_PERIOD;
+        subscriptionEndTimes[msg.sender] = endTime;
+        
+        // Then perform the external call
+        require(pptToken.transfer(msg.sender, SUBSCRIPTION_AMOUNT), "Token transfer failed");
+        
+        emit NewSubscription(msg.sender, endTime);
+    }
+
+    function withdrawTokens(uint256 amount) external onlyOwner {
+        require(pptToken.transfer(owner(), amount), "Token withdrawal failed");
     }
 }

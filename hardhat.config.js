@@ -8,11 +8,15 @@ module.exports = {
       url: process.env.RPC_URL,
       accounts: [process.env.PRIVATE_KEY]
     },
+    "filecoin": {
+      url: process.env.RPC_URL,
+      accounts: [process.env.PRIVATE_KEY]
+    },
     "op-sepolia": {
       url: process.env.RPC_URL,
       accounts: [process.env.PRIVATE_KEY]
     },
-    "optimism": {
+    "op-mainnet": {
       url: process.env.RPC_URL,
       accounts: [process.env.PRIVATE_KEY]
     },
@@ -22,10 +26,6 @@ module.exports = {
     },
     "celo-alfajores": {
       url: process.env.RPC_URL,
-      accounts: [process.env.PRIVATE_KEY]
-    },
-    "op-mainnet": {
-      url: process.env.RPC_URL_MAINNET,
       accounts: [process.env.PRIVATE_KEY]
     }
   },
