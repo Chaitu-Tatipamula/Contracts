@@ -39,6 +39,16 @@ contract MedInvoiceContract is Ownable, ReentrancyGuard {
         return subscriptionEndTimes[user] > block.timestamp;
     }
 
+    function getSubscriptionDetails() public view returns (
+        bool exists,
+        uint256 endTime
+    ) {
+        uint256 userEndTime = subscriptionEndTimes[msg.sender];
+        exists = userEndTime > 0;
+        endTime = userEndTime;
+        return (exists, endTime);
+    }
+
     function getSubscriptionEndDate(address user) public view returns (uint256) {
         return subscriptionEndTimes[user];
     }
@@ -46,11 +56,8 @@ contract MedInvoiceContract is Ownable, ReentrancyGuard {
     function subscribe() external nonReentrant {
         require(!isSubscribed(msg.sender), "Already subscribed");
         
-        // First update the state
         uint256 endTime = block.timestamp + SUBSCRIPTION_PERIOD;
         subscriptionEndTimes[msg.sender] = endTime;
-        
-        // Then perform the external call
         require(pptToken.transfer(msg.sender, SUBSCRIPTION_AMOUNT), "Token transfer failed");
         
         emit NewSubscription(msg.sender, endTime);
